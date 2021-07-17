@@ -1,6 +1,7 @@
 #include <gtest/gtest.h>
 
 #include "rpgcharacter.hpp"
+#include "constants.hpp"
 
 using namespace ::testing;
 
@@ -13,7 +14,7 @@ TEST_F(RPGCharacterInitialValuesTest, characterIsAliveInitially) { ASSERT_TRUE(h
 
 TEST_F(RPGCharacterInitialValuesTest, characterHas1000HealthInitially)
 {
-    ASSERT_EQ(hero.getHealth(), 1000);
+    ASSERT_EQ(hero.getHealth(), initial_health);
 }
 
 TEST_F(RPGCharacterInitialValuesTest, characterIsLevel1Initially) { ASSERT_EQ(hero.getLevel(), 1); }

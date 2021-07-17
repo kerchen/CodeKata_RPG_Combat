@@ -17,7 +17,7 @@ public:
     bool isAlive() const;
     std::uint16_t getHealth() const;
     std::uint8_t getLevel() const;
-    void dealDamageTo(RPGCharacter& other_character) const;
+    void dealDamageTo(RPGCharacter& other_character, int damage_value = 1) const;
 
 };
 

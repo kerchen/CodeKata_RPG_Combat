@@ -1,6 +1,7 @@
 #include <gtest/gtest.h>
 
 #include "rpgcharacter.hpp"
+#include "constants.hpp"
 
 using namespace ::testing;
 
@@ -13,5 +14,17 @@ protected:
 
 TEST_F(RPGCharacterDealDamageTest, DealDamageReducesHealthOfTargetCharacter) {
     heroA.dealDamageTo(heroB);
-    ASSERT_LT(heroB.getHealth(), 1000);
+    ASSERT_LT(heroB.getHealth(), initial_health);
+}
+
+TEST_F(RPGCharacterDealDamageTest, DealDamageForHealthZero){
+    
+    heroA.dealDamageTo(heroB,initial_health);
+    ASSERT_EQ(heroB.getHealth(),0);
+}
+
+TEST_F(RPGCharacterDealDamageTest, DealDamageToKill){
+    
+    heroA.dealDamageTo(heroB,initial_health);
+    ASSERT_EQ(heroB.isAlive(),false);
 }
