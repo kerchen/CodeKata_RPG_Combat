@@ -2,25 +2,26 @@
 
 RPGCharacter::RPGCharacter() { }
 
-bool RPGCharacter::isAlive() const { 
-    return m_health > 0; 
-}
+bool RPGCharacter::isAlive() const { return m_health > 0; }
 
 std::uint16_t RPGCharacter::getHealth() const { return m_health; }
 
 std::uint8_t RPGCharacter::getLevel() const { return m_level; }
 
-void RPGCharacter::dealDamageTo(RPGCharacter& other_character , int damage_value) const {
+void RPGCharacter::dealDamageTo(RPGCharacter& other_character, int damage_value) const
+{
     other_character.changeHealth(-damage_value);
 }
 
-void RPGCharacter::changeHealth(int health_value) {
-    if (health_value + m_health > 1000) {
+void RPGCharacter::changeHealth(int health_value)
+{
+    auto const newHealth = health_value + m_health;
+    if (newHealth > 1000) {
         m_health = 1000;
-    } else if (health_value + m_health < 0) {
+    } else if (newHealth < 0) {
         m_health = 0;
     } else {
-        m_health += health_value;
+        m_health = newHealth;
     }
 }
 
@@ -30,4 +31,3 @@ void RPGCharacter::applyHealingTo(RPGCharacter& other_character, int healing_val
         other_character.changeHealth(healing_value);
     }
 }
-

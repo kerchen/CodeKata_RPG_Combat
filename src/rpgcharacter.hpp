@@ -19,7 +19,6 @@ public:
     std::uint8_t getLevel() const;
     void dealDamageTo(RPGCharacter& other_character, int damage_value = 1) const;
     void applyHealingTo(RPGCharacter& other_character, int healing_value = 1) const;
-
 };
 
 #endif // CODE_KATA_RPGCHARACTER_HPP
