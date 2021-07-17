@@ -8,7 +8,7 @@ private:
     int m_health { 1000 };
     std::uint8_t m_level { 1u };
 
-    void takeDamage(int damage_value);
+    void changeHealth(int health_value);
 
 public:
     RPGCharacter();
@@ -18,6 +18,7 @@ public:
     std::uint16_t getHealth() const;
     std::uint8_t getLevel() const;
     void dealDamageTo(RPGCharacter& other_character, int damage_value = 1) const;
+    void applyHealingTo(RPGCharacter& other_character, int healing_value = 1) const;
 
 };
 

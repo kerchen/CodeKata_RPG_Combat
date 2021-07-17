@@ -23,6 +23,12 @@ TEST_F(RPGCharacterDealDamageTest, DealDamageForHealthZero){
     ASSERT_EQ(heroB.getHealth(),0);
 }
 
+TEST_F(RPGCharacterDealDamageTest, DealingDamageInExcessOfCurrentHealthResultsInZeroHealth){
+
+    heroA.dealDamageTo(heroB,heroB.getHealth()+1);
+    ASSERT_EQ(heroB.getHealth(),0);
+}
+
 TEST_F(RPGCharacterDealDamageTest, DealDamageToKill){
     
     heroA.dealDamageTo(heroB,initial_health);
