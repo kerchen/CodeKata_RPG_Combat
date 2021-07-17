@@ -1,12 +1,19 @@
 #ifndef CODE_KATA_RPGCHARACTER_HPP
 #define CODE_KATA_RPGCHARACTER_HPP
 
-class RPGCharacter
-{
+#include <cstdint>
+
+class RPGCharacter {
+private:
+    int m_health { 1000 };
+    std::uint8_t m_level { 1u };
+
 public:
     RPGCharacter();
     virtual ~RPGCharacter() = default;
 
-    bool isAlive();
+    bool isAlive() const;
+    std::uint16_t getHealth() const;
+    std::uint8_t getLevel() const;
 };
 #endif // CODE_KATA_RPGCHARACTER_HPP

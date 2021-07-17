@@ -1,12 +1,9 @@
 #include "rpgcharacter.hpp"
 
+RPGCharacter::RPGCharacter() { }
 
-RPGCharacter::RPGCharacter()
-{
+bool RPGCharacter::isAlive() const { return true; }
 
-}
+std::uint16_t RPGCharacter::getHealth() const { return m_health; }
 
-bool RPGCharacter::isAlive()
-{
-    return true;
-}
+std::uint8_t RPGCharacter::getLevel() const { return m_level; }
