@@ -7,6 +7,7 @@ using namespace ::testing;
 
 class RPGCharacterDealDamageTest : public ::testing::Test {
 protected:
+    RPGCharacterDealDamageTest() { }
     RPGCharacter const heroA;
     RPGCharacter heroB;
 };
@@ -27,8 +28,8 @@ TEST_F(RPGCharacterDealDamageTest, DealDamageForHealthZero)
 TEST_F(RPGCharacterDealDamageTest, DealingDamageInExcessOfCurrentHealthResultsInZeroHealth)
 {
 
-    heroA.dealDamageTo(heroB, heroB.getHealth() + 1);
-    ASSERT_EQ(heroB.getHealth(), 0);
+    heroA.dealDamageTo(heroB, heroB.getHealth() + 1.0f);
+    ASSERT_EQ(heroB.getHealth(), 0.0f);
 }
 
 TEST_F(RPGCharacterDealDamageTest, DealDamageToKill)
@@ -40,6 +41,15 @@ TEST_F(RPGCharacterDealDamageTest, DealDamageToKill)
 
 TEST_F(RPGCharacterDealDamageTest, CharacterCantDealDamageToSelf)
 {
-    heroB.dealDamageTo(heroB, 1);
+    heroB.dealDamageTo(heroB, 1.0f);
     ASSERT_EQ(heroB.getHealth(), initial_health);
+}
+
+RPGCharacter getHeroLevel(std::uint8_t level) { return RPGCharacter{initial_health, level}; }
+
+TEST_F(RPGCharacterDealDamageTest, DamageToHighLevelCharacterIsReduced)
+{
+    heroB = getHeroLevel(100);
+    heroA.dealDamageTo(heroB, 500.0f);
+    ASSERT_EQ(heroB.getHealth(), 750.0f);
 }

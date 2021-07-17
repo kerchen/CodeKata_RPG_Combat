@@ -14,7 +14,7 @@ TEST_F(RPGCharacterInitialValuesTest, characterIsAliveInitially) { ASSERT_TRUE(h
 
 TEST_F(RPGCharacterInitialValuesTest, characterHas1000HealthInitially)
 {
-    ASSERT_EQ(hero.getHealth(), initial_health);
+    ASSERT_FLOAT_EQ(hero.getHealth(), initial_health);
 }
 
 TEST_F(RPGCharacterInitialValuesTest, characterIsLevel1Initially) { ASSERT_EQ(hero.getLevel(), 1); }
