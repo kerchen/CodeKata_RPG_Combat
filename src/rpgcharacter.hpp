@@ -9,7 +9,7 @@ private:
     std::uint8_t m_level { 1u };
 
     void changeHealth(float health_value);
-
+    void calcDamage(RPGCharacter& other_character, float& damage_value) const;
 public:
     RPGCharacter(float initial_health = 1000.0f, std::uint8_t level = 1);
     virtual ~RPGCharacter() = default;
