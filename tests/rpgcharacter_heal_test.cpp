@@ -18,13 +18,29 @@ void RPGCharacterHealTest::killHeroB() { heroA.dealDamageTo(heroB, heroB.getHeal
 TEST_F(RPGCharacterHealTest, DeadCharacterCannotBeHealed)
 {
     killHeroB();
-    heroA.applyHealingTo(heroB, 1);
+    heroB.applyHealingTo(heroB, 1);
     ASSERT_EQ(heroB.isAlive(), false);
 }
 
 TEST_F(RPGCharacterHealTest, CharacterCannotBeHealedAboveMaximum)
 {
+    heroB.applyHealingTo(heroB, 1);
+
+    ASSERT_EQ(heroB.getHealth(), maximum_health);
+}
+
+TEST_F(RPGCharacterHealTest, CharacterCanNotHealOtherCharacter)
+{
+    heroA.dealDamageTo(heroB, 1);
     heroA.applyHealingTo(heroB, 1);
+
+    ASSERT_EQ(heroB.getHealth(), maximum_health - 1);
+}
+
+TEST_F(RPGCharacterHealTest, CharacterCanHealSelf)
+{
+    heroA.dealDamageTo(heroB, 1);
+    heroB.applyHealingTo(heroB, 1);
 
     ASSERT_EQ(heroB.getHealth(), maximum_health);
 }

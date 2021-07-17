@@ -10,6 +10,10 @@ std::uint8_t RPGCharacter::getLevel() const { return m_level; }
 
 void RPGCharacter::dealDamageTo(RPGCharacter& other_character, int damage_value) const
 {
+    if (&other_character == this) {
+        return;
+    }
+
     other_character.changeHealth(-damage_value);
 }
 
@@ -27,6 +31,10 @@ void RPGCharacter::changeHealth(int health_value)
 
 void RPGCharacter::applyHealingTo(RPGCharacter& other_character, int healing_value) const
 {
+    if (&other_character != this) {
+        return;
+    }
+
     if (other_character.isAlive()) {
         other_character.changeHealth(healing_value);
     }

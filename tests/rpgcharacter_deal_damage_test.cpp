@@ -37,3 +37,9 @@ TEST_F(RPGCharacterDealDamageTest, DealDamageToKill)
     heroA.dealDamageTo(heroB, initial_health);
     ASSERT_EQ(heroB.isAlive(), false);
 }
+
+TEST_F(RPGCharacterDealDamageTest, CharacterCantDealDamageToSelf)
+{
+    heroB.dealDamageTo(heroB, 1);
+    ASSERT_EQ(heroB.getHealth(), initial_health);
+}
