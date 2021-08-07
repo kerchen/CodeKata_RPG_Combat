@@ -60,3 +60,31 @@ TEST_F(RPGCharacterDealDamageTest, DamageToLowLevelCharacterIsIncreased)
     heroC.dealDamageTo(heroB, 500.0f);
     ASSERT_EQ(heroB.getHealth(), 250.0f);
 }
+
+TEST_F(RPGCharacterDealDamageTest, DamageToHighLevelCharacterIsReducedWith5LevelsDifference)
+{
+    heroB = getHeroLevel(6);
+    heroA.dealDamageTo(heroB, 500.0f);
+    ASSERT_EQ(heroB.getHealth(), 750.0f);
+}
+
+TEST_F(RPGCharacterDealDamageTest, DamageToLowLevelCharacterIsIncreasedWith5LevelsDifference)
+{
+    RPGCharacter heroC = getHeroLevel(6);
+    heroC.dealDamageTo(heroB, 500.0f);
+    ASSERT_EQ(heroB.getHealth(), 250.0f);
+}
+
+TEST_F(RPGCharacterDealDamageTest, DamageToHighLevelCharacterIsNotReducedWith4LevelsDifference)
+{
+    heroB = getHeroLevel(5);
+    heroA.dealDamageTo(heroB, 500.0f);
+    ASSERT_EQ(heroB.getHealth(), 500.0f);
+}
+
+TEST_F(RPGCharacterDealDamageTest, DamageToLowLevelCharacterIsNotIncreasedWith4LevelsDifference)
+{
+    RPGCharacter heroC = getHeroLevel(5);
+    heroC.dealDamageTo(heroB, 500.0f);
+    ASSERT_EQ(heroB.getHealth(), 500.0f);
+}
