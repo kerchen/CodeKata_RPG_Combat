@@ -44,3 +44,16 @@ TEST(RPGCharacterFactionTest, HerosInSameFactionAreAllies)
 
     ASSERT_TRUE(heroA.isAllyWith(heroB));
 }
+
+TEST(RPGCharacterFactionTest, HerosNotInSameFactionsAreNotAllies)
+{
+    RPGCharacter heroA {};
+    RPGCharacter heroB {};
+    auto f1 = std::make_shared<Faction>(Faction { "Peoples' Front of Judea" });
+    auto f2 = std::make_shared<Faction>(Faction { "Judean Peoples' Front" });
+
+    heroA.joinFaction(f1);
+    heroB.joinFaction(f2);
+
+    ASSERT_FALSE(heroA.isAllyWith(heroB));
+}
