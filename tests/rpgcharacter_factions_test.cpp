@@ -1,6 +1,5 @@
 #include "faction.hpp"
 #include "rpgcharacter.hpp"
-#include <algorithm>
 #include <gtest/gtest.h>
 #include <memory>
 
@@ -10,6 +9,26 @@ TEST(RPGCharacterFactionTest, HeroCanJoinFaction)
     auto f = std::make_shared<Faction>(Faction { "awesome guild" });
     hero.joinFaction(f);
 
-    auto const factions = hero.getFactions();
-    ASSERT_EQ(std::count(factions.begin(), factions.end(), f), 1);
+    ASSERT_TRUE(hero.isMemberOfFaction(f));
+}
+
+TEST(RPGCharacterFactionTest, HeroCanLeaveFaction)
+{
+    RPGCharacter hero {};
+    auto f = std::make_shared<Faction>(Faction { "awesome guild" });
+    hero.joinFaction(f);
+    hero.leaveFaction(f);
+
+    ASSERT_FALSE(hero.isMemberOfFaction(f));
+}
+
+TEST(RPGCharacterFactionTest, HeroCannotJoinSameFactionMultipleTimes)
+{
+    RPGCharacter hero {};
+    auto f = std::make_shared<Faction>(Faction { "awesome guild" });
+    hero.joinFaction(f);
+    hero.joinFaction(f);
+    hero.leaveFaction(f);
+
+    ASSERT_FALSE(hero.isMemberOfFaction(f));
 }

@@ -1,5 +1,6 @@
 #include "rpgcharacter.hpp"
 #include "faction.hpp"
+#include <algorithm>
 #include <map>
 #include <vector>
 
@@ -81,6 +82,13 @@ void RPGCharacter::setPosition(Position const pos) { m_position = pos; }
 
 double RPGCharacter::getDistance(Position const pos) { return m_position.getDistance(pos); }
 
-std::vector<std::shared_ptr<Faction>> RPGCharacter::getFactions() const { return m_factions; }
+std::set<std::shared_ptr<Faction>> RPGCharacter::getFactions() const { return m_factions; }
 
-void RPGCharacter::joinFaction(std::shared_ptr<Faction> faction) { m_factions.push_back(faction); }
+void RPGCharacter::joinFaction(std::shared_ptr<Faction> faction) { m_factions.insert(faction); }
+
+void RPGCharacter::leaveFaction(std::shared_ptr<Faction> faction) { m_factions.erase(faction); }
+
+bool RPGCharacter::isMemberOfFaction(std::shared_ptr<Faction> faction)
+{
+    return std::count(m_factions.begin(), m_factions.end(), faction) == 1;
+}

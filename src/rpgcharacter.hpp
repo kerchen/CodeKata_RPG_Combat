@@ -3,8 +3,8 @@
 
 #include "position.hpp"
 #include <cstdint>
-#include <vector>
 #include <memory>
+#include <set>
 
 struct Faction;
 
@@ -16,11 +16,10 @@ private:
     std::uint8_t m_level { 1u };
     FighterType m_fighterType;
     Position m_position;
-    std::vector<std::shared_ptr<Faction>> m_factions;
+    std::set<std::shared_ptr<Faction>> m_factions;
 
     void changeHealth(float health_value);
     void calcDamage(RPGCharacter& other_character, float& damage_value) const;
-
 
 public:
     RPGCharacter(float initial_health = 1000.0f, uint8_t level = 1,
@@ -35,8 +34,10 @@ public:
     double getAttackRange() const;
     void setPosition(Position const pos);
     double getDistance(Position const pos);
-    std::vector<std::shared_ptr<Faction>> getFactions() const;
+    std::set<std::shared_ptr<Faction>> getFactions() const;
     void joinFaction(std::shared_ptr<Faction> faction);
+    void leaveFaction(std::shared_ptr<Faction> faction);
+    bool isMemberOfFaction(std::shared_ptr<Faction> faction);
 };
 
 #endif // CODE_KATA_RPGCHARACTER_HPP
