@@ -53,3 +53,10 @@ TEST_F(RPGCharacterDealDamageTest, DamageToHighLevelCharacterIsReduced)
     heroA.dealDamageTo(heroB, 500.0f);
     ASSERT_EQ(heroB.getHealth(), 750.0f);
 }
+
+TEST_F(RPGCharacterDealDamageTest, DamageToLowLevelCharacterIsIncreased)
+{
+    RPGCharacter heroC = getHeroLevel(100);
+    heroC.dealDamageTo(heroB, 500.0f);
+    ASSERT_EQ(heroB.getHealth(), 250.0f);
+}
