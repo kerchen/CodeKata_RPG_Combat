@@ -49,58 +49,73 @@ TEST_F(RPGCharacterDealDamageTest, CharacterCantDealDamageToSelf)
     ASSERT_EQ(heroB.getHealth(), initial_health);
 }
 
-RPGCharacter getHeroLevel(std::uint8_t level) { return RPGCharacter { initial_health, level }; }
+RPGCharacter getMeleeHeroAtLevel(std::uint8_t level)
+{
+    return RPGCharacter { initial_health, level };
+}
+RPGCharacter getRangedHeroAtLevel(std::uint8_t level)
+{
+    return RPGCharacter { initial_health, level, FighterType::RangedFighter };
+}
 
 TEST_F(RPGCharacterDealDamageTest, DamageToHighLevelCharacterIsReduced)
 {
-    heroB = getHeroLevel(100);
+    heroB = getMeleeHeroAtLevel(100);
     heroA.dealDamageTo(heroB, 500.0f);
     ASSERT_EQ(heroB.getHealth(), 750.0f);
 }
 
 TEST_F(RPGCharacterDealDamageTest, DamageToLowLevelCharacterIsIncreased)
 {
-    RPGCharacter heroC = getHeroLevel(100);
+    RPGCharacter heroC = getMeleeHeroAtLevel(100);
     heroC.dealDamageTo(heroB, 500.0f);
     ASSERT_EQ(heroB.getHealth(), 250.0f);
 }
 
 TEST_F(RPGCharacterDealDamageTest, DamageToHighLevelCharacterIsReducedWith5LevelsDifference)
 {
-    heroB = getHeroLevel(6);
+    heroB = getMeleeHeroAtLevel(6);
     heroA.dealDamageTo(heroB, 500.0f);
     ASSERT_EQ(heroB.getHealth(), 750.0f);
 }
 
 TEST_F(RPGCharacterDealDamageTest, DamageToLowLevelCharacterIsIncreasedWith5LevelsDifference)
 {
-    RPGCharacter heroC = getHeroLevel(6);
+    RPGCharacter heroC = getMeleeHeroAtLevel(6);
     heroC.dealDamageTo(heroB, 500.0f);
     ASSERT_EQ(heroB.getHealth(), 250.0f);
 }
 
 TEST_F(RPGCharacterDealDamageTest, DamageToHighLevelCharacterIsNotReducedWith4LevelsDifference)
 {
-    heroB = getHeroLevel(5);
+    heroB = getMeleeHeroAtLevel(5);
     heroA.dealDamageTo(heroB, 500.0f);
     ASSERT_EQ(heroB.getHealth(), 500.0f);
 }
 
 TEST_F(RPGCharacterDealDamageTest, DamageToLowLevelCharacterIsNotIncreasedWith4LevelsDifference)
 {
-    RPGCharacter heroC = getHeroLevel(5);
+    RPGCharacter heroC = getMeleeHeroAtLevel(5);
     heroC.dealDamageTo(heroB, 500.0f);
     ASSERT_EQ(heroB.getHealth(), 500.0f);
 }
 
-TEST_F(RPGCharacterDealDamageTest, OutOfRangeCharacterDoesntDealDamage)
+TEST_F(RPGCharacterDealDamageTest, OutOfRangeMeleeCharacterDoesntDealDamage)
 {
-    RPGCharacter heroC = getHeroLevel(1);
-    Position positionHeroC { 0.0 };
-    Position positionHeroB { 15.0 };
+    RPGCharacter const heroC = getMeleeHeroAtLevel(1);
+    Position const positionHeroB { 15.0 };
 
     heroB.setPosition(positionHeroB);
-    heroC.setPosition(positionHeroC);
+    heroC.dealDamageTo(heroB, 500.0f);
+    ASSERT_EQ(heroB.getHealth(), initial_health);
+}
+
+TEST_F(RPGCharacterDealDamageTest, OutOfRangeRangedCharacterDoesntDealDamage)
+{
+    RPGCharacter const heroC = getRangedHeroAtLevel(1);
+    Position const positionHeroB { 25.0 };
+
+    heroB.setPosition(positionHeroB);
     heroC.dealDamageTo(heroB, 500.0f);
     ASSERT_EQ(heroB.getHealth(), initial_health);
 }
