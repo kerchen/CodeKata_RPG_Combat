@@ -19,6 +19,11 @@ TEST_F(RPGCharacterInitialValuesTest, characterHas1000HealthInitially)
 
 TEST_F(RPGCharacterInitialValuesTest, characterIsLevel1Initially) { ASSERT_EQ(hero.getLevel(), 1); }
 
+
+TEST_F(RPGCharacterInitialValuesTest, CharacterDoesNotBelongToAnyFaction) { ASSERT_TRUE(hero.getFactions().empty()); }
+
+
+
 TEST(RPGCharacterInitialRangeValuesTest, RangeOfMeleeFighterIs2)
 {
     RPGCharacter const melee_fighter { initial_health, 1, FighterType::MeleeFighter };
@@ -30,3 +35,4 @@ TEST(RPGCharacterInitialRangeValuesTest, RangeOfRangedFighterIs20)
     RPGCharacter const ranged_fighter { initial_health, 1, FighterType::RangedFighter };
     ASSERT_EQ(ranged_fighter.getAttackRange(), 20.0);
 }
+

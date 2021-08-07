@@ -1,5 +1,7 @@
 #include "rpgcharacter.hpp"
+#include "faction.hpp"
 #include <map>
+#include <vector>
 
 RPGCharacter::RPGCharacter(float initial_health, uint8_t level, FighterType fighterType)
     : m_health { initial_health }
@@ -78,3 +80,7 @@ double RPGCharacter::getAttackRange() const
 void RPGCharacter::setPosition(Position const pos) { m_position = pos; }
 
 double RPGCharacter::getDistance(Position const pos) { return m_position.getDistance(pos); }
+
+std::vector<std::shared_ptr<Faction>> RPGCharacter::getFactions() const { return m_factions; }
+
+void RPGCharacter::joinFaction(std::shared_ptr<Faction> faction) { m_factions.push_back(faction); }
