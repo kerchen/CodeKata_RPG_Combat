@@ -22,11 +22,11 @@ TEST_F(RPGCharacterInitialValuesTest, characterIsLevel1Initially) { ASSERT_EQ(he
 TEST(RPGCharacterInitialRangeValuesTest, RangeOfMeleeFighterIs2)
 {
     RPGCharacter const melee_fighter { initial_health, 1, FighterType::MeleeFighter };
-    ASSERT_EQ(melee_fighter.getAttackRange(), 2);
+    ASSERT_EQ(melee_fighter.getAttackRange(), 2.0);
 }
 
 TEST(RPGCharacterInitialRangeValuesTest, RangeOfRangedFighterIs20)
 {
-    RPGCharacter const melee_fighter { initial_health, 1, FighterType::RangedFighter };
-    ASSERT_EQ(melee_fighter.getAttackRange(), 20);
+    RPGCharacter const ranged_fighter { initial_health, 1, FighterType::RangedFighter };
+    ASSERT_EQ(ranged_fighter.getAttackRange(), 20.0);
 }

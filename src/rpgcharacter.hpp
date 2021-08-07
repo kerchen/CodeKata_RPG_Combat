@@ -1,12 +1,10 @@
 #ifndef CODE_KATA_RPGCHARACTER_HPP
 #define CODE_KATA_RPGCHARACTER_HPP
 
+#include "position.hpp"
 #include <cstdint>
 
-enum FighterType {
-        MeleeFighter,
-        RangedFighter
-};
+enum FighterType { MeleeFighter, RangedFighter };
 
 class RPGCharacter {
 private:
@@ -15,6 +13,8 @@ private:
 
     void changeHealth(float health_value);
     void calcDamage(RPGCharacter& other_character, float& damage_value) const;
+    FighterType m_fighterType;
+    Position m_position;
 
 public:
     RPGCharacter(float initial_health = 1000.0f, uint8_t level = 1,
@@ -26,8 +26,9 @@ public:
     std::uint8_t getLevel() const;
     void dealDamageTo(RPGCharacter& other_character, float damage_value = 1) const;
     void applyHealingTo(RPGCharacter& other_character, float healing_value = 1) const;
-    double getAttackRange () const;
-    FighterType m_fighterType;
+    double getAttackRange() const;
+    void setPosition(Position const pos);
+    double getDistance(Position const pos);
 };
 
 #endif // CODE_KATA_RPGCHARACTER_HPP

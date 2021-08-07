@@ -4,7 +4,7 @@
 RPGCharacter::RPGCharacter(float initial_health, uint8_t level, FighterType fighterType)
     : m_health { initial_health }
     , m_level { level }
-    , m_fighterType{fighterType}
+    , m_fighterType { fighterType }
 {
 }
 
@@ -33,8 +33,11 @@ void RPGCharacter::calcDamage(RPGCharacter& other_character, float& damage_value
 
 void RPGCharacter::dealDamageTo(RPGCharacter& other_character, float damage_value) const
 {
-
     if (&other_character == this) {
+        return;
+    }
+
+    if (other_character.getDistance(m_position) > getAttackRange()) {
         return;
     }
 
@@ -65,7 +68,13 @@ void RPGCharacter::applyHealingTo(RPGCharacter& other_character, float healing_v
         other_character.changeHealth(healing_value);
     }
 }
-double RPGCharacter::getAttackRange() const {
-    std::map<FighterType, double> attack_range_lookpu  {{FighterType::MeleeFighter, 2.0}, {FighterType::RangedFighter, 20.0}};
+double RPGCharacter::getAttackRange() const
+{
+    std::map<FighterType, double> attack_range_lookpu { { FighterType::MeleeFighter, 2.0 },
+        { FighterType::RangedFighter, 20.0 } };
     return attack_range_lookpu[m_fighterType];
 }
+
+void RPGCharacter::setPosition(Position const pos) { m_position = pos; }
+
+double RPGCharacter::getDistance(Position const pos) { return abs(pos.value - m_position.value); }

@@ -1,6 +1,7 @@
 #include <gtest/gtest.h>
 
 #include "constants.hpp"
+#include "position.hpp"
 #include "rpgcharacter.hpp"
 
 using namespace ::testing;
@@ -9,7 +10,8 @@ class RPGCharacterDealDamageTest : public ::testing::Test {
 protected:
     RPGCharacterDealDamageTest()
         : heroB()
-    { }
+    {
+    }
     RPGCharacter const heroA;
     RPGCharacter heroB;
 };
@@ -47,7 +49,7 @@ TEST_F(RPGCharacterDealDamageTest, CharacterCantDealDamageToSelf)
     ASSERT_EQ(heroB.getHealth(), initial_health);
 }
 
-RPGCharacter getHeroLevel(std::uint8_t level) { return RPGCharacter{initial_health, level}; }
+RPGCharacter getHeroLevel(std::uint8_t level) { return RPGCharacter { initial_health, level }; }
 
 TEST_F(RPGCharacterDealDamageTest, DamageToHighLevelCharacterIsReduced)
 {
@@ -89,4 +91,16 @@ TEST_F(RPGCharacterDealDamageTest, DamageToLowLevelCharacterIsNotIncreasedWith4L
     RPGCharacter heroC = getHeroLevel(5);
     heroC.dealDamageTo(heroB, 500.0f);
     ASSERT_EQ(heroB.getHealth(), 500.0f);
+}
+
+TEST_F(RPGCharacterDealDamageTest, OutOfRangeCharacterDoesntDealDamage)
+{
+    RPGCharacter heroC = getHeroLevel(1);
+    Position positionHeroC { 0.0 };
+    Position positionHeroB { 15.0 };
+
+    heroB.setPosition(positionHeroB);
+    heroC.setPosition(positionHeroC);
+    heroC.dealDamageTo(heroB, 500.0f);
+    ASSERT_EQ(heroB.getHealth(), initial_health);
 }
