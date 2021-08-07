@@ -77,4 +77,4 @@ double RPGCharacter::getAttackRange() const
 
 void RPGCharacter::setPosition(Position const pos) { m_position = pos; }
 
-double RPGCharacter::getDistance(Position const pos) { return abs(pos.value - m_position.value); }
+double RPGCharacter::getDistance(Position const pos) { return m_position.getDistance(pos); }

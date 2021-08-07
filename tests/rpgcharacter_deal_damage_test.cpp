@@ -9,11 +9,10 @@ using namespace ::testing;
 class RPGCharacterDealDamageTest : public ::testing::Test {
 protected:
     RPGCharacterDealDamageTest()
-        : heroB()
     {
     }
-    RPGCharacter const heroA;
-    RPGCharacter heroB;
+    RPGCharacter const heroA {};
+    RPGCharacter heroB {};
 };
 
 TEST_F(RPGCharacterDealDamageTest, DealDamageReducesHealthOfTargetCharacter)
@@ -118,4 +117,14 @@ TEST_F(RPGCharacterDealDamageTest, OutOfRangeRangedCharacterDoesntDealDamage)
     heroB.setPosition(positionHeroB);
     heroC.dealDamageTo(heroB, 500.0f);
     ASSERT_EQ(heroB.getHealth(), initial_health);
+}
+
+TEST_F(RPGCharacterDealDamageTest, InRangeRangedCharacterDealsDamage)
+{
+    RPGCharacter const heroC = getRangedHeroAtLevel(1);
+    Position const positionHeroB { 15.0 };
+
+    heroB.setPosition(positionHeroB);
+    heroC.dealDamageTo(heroB, 500.0f);
+    ASSERT_EQ(heroB.getHealth(), 500.0f);
 }
