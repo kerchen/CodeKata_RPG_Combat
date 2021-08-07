@@ -80,7 +80,7 @@ double RPGCharacter::getAttackRange() const
 
 void RPGCharacter::setPosition(Position const pos) { m_position = pos; }
 
-double RPGCharacter::getDistance(Position const pos) { return m_position.getDistance(pos); }
+double RPGCharacter::getDistance(Position const pos) const { return m_position.getDistance(pos); }
 
 std::set<std::shared_ptr<Faction>> RPGCharacter::getFactions() const { return m_factions; }
 
@@ -88,7 +88,17 @@ void RPGCharacter::joinFaction(std::shared_ptr<Faction> faction) { m_factions.in
 
 void RPGCharacter::leaveFaction(std::shared_ptr<Faction> faction) { m_factions.erase(faction); }
 
-bool RPGCharacter::isMemberOfFaction(std::shared_ptr<Faction> faction)
+bool RPGCharacter::isMemberOfFaction(std::shared_ptr<Faction> faction) const
 {
     return std::count(m_factions.begin(), m_factions.end(), faction) == 1;
+}
+
+bool RPGCharacter::isAllyWith(RPGCharacter const& character) const
+{
+    std::vector<std::shared_ptr<Faction>> intersection;
+    std::set_intersection(m_factions.begin(), m_factions.end(),
+                            character.m_factions.begin(), character.m_factions.end(),
+                            std::back_inserter(intersection));
+
+    return ! intersection.empty();
 }

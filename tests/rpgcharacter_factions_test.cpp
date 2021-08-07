@@ -32,3 +32,15 @@ TEST(RPGCharacterFactionTest, HeroCannotJoinSameFactionMultipleTimes)
 
     ASSERT_FALSE(hero.isMemberOfFaction(f));
 }
+
+TEST(RPGCharacterFactionTest, HerosInSameFactionAreAllies)
+{
+    RPGCharacter heroA {};
+    RPGCharacter heroB {};
+    auto f = std::make_shared<Faction>(Faction { "awesome guild" });
+
+    heroA.joinFaction(f);
+    heroB.joinFaction(f);
+
+    ASSERT_TRUE(heroA.isAllyWith(heroB));
+}

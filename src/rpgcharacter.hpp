@@ -33,11 +33,12 @@ public:
     void applyHealingTo(RPGCharacter& other_character, float healing_value = 1) const;
     double getAttackRange() const;
     void setPosition(Position const pos);
-    double getDistance(Position const pos);
+    double getDistance(Position const pos) const;
     std::set<std::shared_ptr<Faction>> getFactions() const;
     void joinFaction(std::shared_ptr<Faction> faction);
     void leaveFaction(std::shared_ptr<Faction> faction);
-    bool isMemberOfFaction(std::shared_ptr<Faction> faction);
+    bool isMemberOfFaction(std::shared_ptr<Faction> faction) const;
+    bool isAllyWith(RPGCharacter const& character) const;
 };
 
 #endif // CODE_KATA_RPGCHARACTER_HPP
