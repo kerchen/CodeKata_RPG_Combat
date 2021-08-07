@@ -1,7 +1,7 @@
 #include <gtest/gtest.h>
 
-#include "rpgcharacter.hpp"
 #include "constants.hpp"
+#include "rpgcharacter.hpp"
 
 using namespace ::testing;
 
@@ -18,3 +18,15 @@ TEST_F(RPGCharacterInitialValuesTest, characterHas1000HealthInitially)
 }
 
 TEST_F(RPGCharacterInitialValuesTest, characterIsLevel1Initially) { ASSERT_EQ(hero.getLevel(), 1); }
+
+TEST(RPGCharacterInitialRangeValuesTest, RangeOfMeleeFighterIs2)
+{
+    RPGCharacter const melee_fighter { initial_health, 1, FighterType::MeleeFighter };
+    ASSERT_EQ(melee_fighter.getAttackRange(), 2);
+}
+
+TEST(RPGCharacterInitialRangeValuesTest, RangeOfRangedFighterIs20)
+{
+    RPGCharacter const melee_fighter { initial_health, 1, FighterType::RangedFighter };
+    ASSERT_EQ(melee_fighter.getAttackRange(), 20);
+}

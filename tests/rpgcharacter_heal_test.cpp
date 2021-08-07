@@ -7,7 +7,9 @@ using namespace ::testing;
 
 class RPGCharacterHealTest : public ::testing::Test {
 protected:
-    RPGCharacterHealTest() { }
+    RPGCharacterHealTest()
+        : heroB()
+    { }
     RPGCharacter const heroA;
     RPGCharacter heroB;
 
