@@ -16,6 +16,10 @@ public:
         const HealthChangeReceptor* other_character, float& damage_value) const override
     {
     }
+    std::set<std::shared_ptr<Faction>> getFactions() const override
+    {
+        return std::set<std::shared_ptr<Faction>>();
+    }
     uint8_t getLevel() const override { return 0; }
 };
 

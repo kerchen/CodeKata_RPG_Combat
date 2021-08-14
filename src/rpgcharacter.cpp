@@ -26,11 +26,10 @@ void RPGCharacter::modifyDamage(HealthChangeReceptor const* other_character, flo
     int level_difference = myLevel - otherLevel;
 
     if (level_difference <= -5) {
-        damage_value *= 0.5f;
+        damage_value *= 1.5f;
     }
     if (level_difference >= 5) {
-
-        damage_value *= 1.5f;
+        damage_value *= 0.5f;
     }
 }
 
@@ -94,8 +93,6 @@ void RPGCharacter::setPosition(Position const pos) { m_position = pos; }
 
 double RPGCharacter::getDistance(Position const pos) const { return m_position.getDistance(pos); }
 
-std::set<std::shared_ptr<Faction>> RPGCharacter::getFactions() const { return m_factions; }
-
 void RPGCharacter::joinFaction(std::shared_ptr<Faction> faction) { m_factions.insert(faction); }
 
 void RPGCharacter::leaveFaction(std::shared_ptr<Faction> faction) { m_factions.erase(faction); }
@@ -108,11 +105,13 @@ bool RPGCharacter::isMemberOfFaction(std::shared_ptr<Faction> faction) const
 bool RPGCharacter::isAllyWith(HealthChangeReceptor const* character) const
 {
     std::vector<std::shared_ptr<Faction>> intersection;
-//    std::set_intersection(m_factions.begin(), m_factions.end(), character->m_factions.begin(),
-//        character->m_factions.end(), std::back_inserter(intersection));
-//
-//    return !intersection.empty();
-    return false;
+
+    std::set<std::shared_ptr<Faction>> factions(character->getFactions());
+    std::set_intersection(m_factions.begin(), m_factions.end(),
+                            factions.begin(), factions.end(),
+                            std::back_inserter(intersection));
+
+    return !intersection.empty();
 }
 
 
