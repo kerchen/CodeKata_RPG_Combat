@@ -1,5 +1,6 @@
 #include "rpgcharacter.hpp"
 #include "faction.hpp"
+#include "prop.hpp"
 #include <algorithm>
 #include <iterator>
 #include <map>
@@ -19,7 +20,7 @@ float RPGCharacter::getHealth() const { return m_health; }
 std::uint8_t RPGCharacter::getLevel() const { return m_level; }
 
 void RPGCharacter::modifyDamage(
-    HealthChangeReceptor const* other_character, float& damage_value) const
+    RPGCharacter const* other_character, float& damage_value) const
 {
     auto const myLevel = static_cast<int>(getLevel());
     auto const otherLevel = static_cast<int>(other_character->getLevel());
@@ -34,7 +35,7 @@ void RPGCharacter::modifyDamage(
     }
 }
 
-void RPGCharacter::dealDamageTo(HealthChangeReceptor& recipient, float damage_value) const
+void RPGCharacter::dealDamageTo(RPGCharacter& recipient, float damage_value) const
 {
     if (&recipient == this) {
         return;
@@ -50,6 +51,10 @@ void RPGCharacter::dealDamageTo(HealthChangeReceptor& recipient, float damage_va
     recipient.modifyDamage(this, damage_value);
 
     recipient.changeHealth(-damage_value);
+}
+
+void RPGCharacter::dealDamageTo(Prop& target, float damage_value) const {
+    target.changeHealth(-damage_value);
 }
 
 void RPGCharacter::changeHealth(float health_value)
@@ -69,7 +74,7 @@ void RPGCharacter::changeHealth(float health_value)
 float RPGCharacter::getMinimumHealth() const { return 0.0f; }
 float RPGCharacter::getMaximumHealth() const { return 1000.0f; }
 
-void RPGCharacter::applyHealingTo(HealthChangeReceptor& other_character, float healing_value) const
+void RPGCharacter::applyHealingTo(RPGCharacter& other_character, float healing_value) const
 {
     bool trying_to_heal_self = &other_character == this;
     bool trying_to_heal_ally = other_character.isAllyWith(this);
@@ -102,7 +107,7 @@ bool RPGCharacter::isMemberOfFaction(std::shared_ptr<Faction> faction) const
     return std::count(m_factions.begin(), m_factions.end(), faction) == 1;
 }
 
-bool RPGCharacter::isAllyWith(HealthChangeReceptor const* character) const
+bool RPGCharacter::isAllyWith(RPGCharacter const* character) const
 {
     std::vector<std::shared_ptr<Faction>> intersection;
 
@@ -112,3 +117,4 @@ bool RPGCharacter::isAllyWith(HealthChangeReceptor const* character) const
 
     return !intersection.empty();
 }
+

@@ -13,5 +13,3 @@ void Prop::changeHealth(float deltaHealth)
         m_health = getMinimumHealth();
     }
 }
-
-bool Prop::isAlive() const { return m_health > getMinimumHealth(); }

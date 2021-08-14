@@ -8,6 +8,7 @@
 #include <set>
 
 struct Faction;
+class Prop;
 
 enum FighterType { MeleeFighter, RangedFighter };
 
@@ -22,9 +23,9 @@ private:
     void changeHealth(float health_value) override;
 
     void modifyDamage(
-        HealthChangeReceptor const* other_character, float& damage_value) const override;
+        RPGCharacter const* other_character, float& damage_value) const;
 
-    float getMaximumHealth() const override;
+    float getMaximumHealth() const ;
     float getMinimumHealth() const;
 
 public:
@@ -32,19 +33,22 @@ public:
         FighterType fighterType = FighterType::MeleeFighter);
     virtual ~RPGCharacter() = default;
 
-    bool isAlive() const override;
-    float getHealth() const override;
-    std::uint8_t getLevel() const override;
-    void dealDamageTo(HealthChangeReceptor& other_character, float damage_value = 1) const;
-    void applyHealingTo(HealthChangeReceptor& other_character, float healing_value = 1) const;
+    bool isAlive() const ;
+    float getHealth() const ;
+    std::uint8_t getLevel() const ;
+
+    void dealDamageTo(RPGCharacter& other_character, float damage_value = 1) const;
+    void dealDamageTo(Prop& target, float damage_value = 1) const;
+
+    void applyHealingTo(RPGCharacter& other_character, float healing_value = 1) const;
     double getAttackRange() const;
     void setPosition(Position const pos);
     double getDistance(Position const pos) const;
     void joinFaction(std::shared_ptr<Faction> faction);
     void leaveFaction(std::shared_ptr<Faction> faction);
     bool isMemberOfFaction(std::shared_ptr<Faction> faction) const;
-    bool isAllyWith(HealthChangeReceptor const* character) const override;
-    std::set<std::shared_ptr<Faction>> getFactions() const override { return m_factions; }
+    bool isAllyWith(RPGCharacter const* character) const ;
+    std::set<std::shared_ptr<Faction>> getFactions() const  { return m_factions; }
 };
 
 #endif // CODE_KATA_RPGCHARACTER_HPP
