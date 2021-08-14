@@ -18,10 +18,10 @@ float RPGCharacter::getHealth() const { return m_health; }
 
 std::uint8_t RPGCharacter::getLevel() const { return m_level; }
 
-void RPGCharacter::modifyDamage(RPGCharacter& other_character, float& damage_value) const
+void RPGCharacter::modifyDamage(HealthChangeReceptor const* other_character, float& damage_value) const
 {
     auto const myLevel = static_cast<int>(getLevel());
-    auto const otherLevel = static_cast<int>(other_character.getLevel());
+    auto const otherLevel = static_cast<int>(other_character->getLevel());
 
     int level_difference = myLevel - otherLevel;
 
@@ -34,22 +34,23 @@ void RPGCharacter::modifyDamage(RPGCharacter& other_character, float& damage_val
     }
 }
 
-void RPGCharacter::dealDamageTo(RPGCharacter& other_character, float damage_value) const
+void RPGCharacter::dealDamageTo(HealthChangeReceptor& recipient, float damage_value) const
 {
-    if (&other_character == this) {
+    if (&recipient == this) {
         return;
     }
 
-    if (other_character.getDistance(m_position) > getAttackRange()) {
+    if (recipient.getDistance(m_position) > getAttackRange()) {
         return;
     }
-    if (isAllyWith(other_character)) {
+    if (recipient.isAllyWith(this)) {
         return;
     }
 
-    modifyDamage(other_character, damage_value);
+    recipient.modifyDamage(this, damage_value);
 
-    other_character.changeHealth(-damage_value);
+
+    recipient.changeHealth(-damage_value);
 }
 
 void RPGCharacter::changeHealth(float health_value)
@@ -72,7 +73,7 @@ float RPGCharacter::getMaximumHealth() const { return 1000.0f; }
 void RPGCharacter::applyHealingTo(RPGCharacter& other_character, float healing_value) const
 {
     bool trying_to_heal_self = &other_character == this;
-    bool trying_to_heal_ally = isAllyWith(other_character);
+    bool trying_to_heal_ally = other_character.isAllyWith(this);
 
     if (!trying_to_heal_self && !trying_to_heal_ally) {
         return;
@@ -104,11 +105,14 @@ bool RPGCharacter::isMemberOfFaction(std::shared_ptr<Faction> faction) const
     return std::count(m_factions.begin(), m_factions.end(), faction) == 1;
 }
 
-bool RPGCharacter::isAllyWith(RPGCharacter const& character) const
+bool RPGCharacter::isAllyWith(HealthChangeReceptor const* character) const
 {
     std::vector<std::shared_ptr<Faction>> intersection;
-    std::set_intersection(m_factions.begin(), m_factions.end(), character.m_factions.begin(),
-        character.m_factions.end(), std::back_inserter(intersection));
-
-    return !intersection.empty();
+//    std::set_intersection(m_factions.begin(), m_factions.end(), character->m_factions.begin(),
+//        character->m_factions.end(), std::back_inserter(intersection));
+//
+//    return !intersection.empty();
+    return false;
 }
+
+

@@ -54,7 +54,7 @@ TEST(RPGCharacterFactionTest, HerosInSameFactionAreAllies)
     heroA.joinFaction(f);
     heroB.joinFaction(f);
 
-    ASSERT_TRUE(heroA.isAllyWith(heroB));
+    ASSERT_TRUE(heroA.isAllyWith(&heroB));
 }
 
 TEST(RPGCharacterFactionTest, HerosNotInSameFactionsAreNotAllies)
@@ -67,7 +67,7 @@ TEST(RPGCharacterFactionTest, HerosNotInSameFactionsAreNotAllies)
     heroA.joinFaction(f1);
     heroB.joinFaction(f2);
 
-    ASSERT_FALSE(heroA.isAllyWith(heroB));
+    ASSERT_FALSE(heroA.isAllyWith(&heroB));
 }
 
 TEST(RPGCharacterFactionTest, HerosInNoFactionAreNoAllies)
@@ -75,5 +75,5 @@ TEST(RPGCharacterFactionTest, HerosInNoFactionAreNoAllies)
     RPGCharacter heroA {};
     RPGCharacter heroB {};
 
-    ASSERT_FALSE(heroA.isAllyWith(heroB));
+    ASSERT_FALSE(heroA.isAllyWith(&heroB));
 }

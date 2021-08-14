@@ -2,6 +2,7 @@
 #define CODE_KATA_RPGCHARACTER_HPP
 
 #include "position.hpp"
+#include "healthchangereceptor.hpp"
 #include <cstdint>
 #include <memory>
 #include <set>
@@ -10,7 +11,7 @@ struct Faction;
 
 enum FighterType { MeleeFighter, RangedFighter };
 
-class RPGCharacter {
+class RPGCharacter : public HealthChangeReceptor {
 private:
     float m_health { 1000.0f };
     std::uint8_t m_level { 1u };
@@ -18,10 +19,11 @@ private:
     Position m_position;
     std::set<std::shared_ptr<Faction>> m_factions;
 
-    void changeHealth(float health_value);
-    void modifyDamage(RPGCharacter& other_character, float& damage_value) const;
+    void changeHealth(float health_value) override;
 
-    float getMaximumHealth() const;
+    void modifyDamage(HealthChangeReceptor const* other_character, float& damage_value) const override;
+
+    float getMaximumHealth() const override;
     float getMinimumHealth() const;
 
 public:
@@ -30,9 +32,9 @@ public:
     virtual ~RPGCharacter() = default;
 
     bool isAlive() const;
-    float getHealth() const;
-    std::uint8_t getLevel() const;
-    void dealDamageTo(RPGCharacter& other_character, float damage_value = 1) const;
+    float getHealth() const override;
+    std::uint8_t getLevel() const override;
+    void dealDamageTo(HealthChangeReceptor& other_character, float damage_value = 1) const;
     void applyHealingTo(RPGCharacter& other_character, float healing_value = 1) const;
     double getAttackRange() const;
     void setPosition(Position const pos);
@@ -41,7 +43,7 @@ public:
     void joinFaction(std::shared_ptr<Faction> faction);
     void leaveFaction(std::shared_ptr<Faction> faction);
     bool isMemberOfFaction(std::shared_ptr<Faction> faction) const;
-    bool isAllyWith(RPGCharacter const& character) const;
+    bool isAllyWith(HealthChangeReceptor const* character) const override;
 };
 
 #endif // CODE_KATA_RPGCHARACTER_HPP
