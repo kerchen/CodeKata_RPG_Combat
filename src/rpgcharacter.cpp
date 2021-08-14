@@ -12,13 +12,14 @@ RPGCharacter::RPGCharacter(float initial_health, uint8_t level, FighterType figh
 {
 }
 
-bool RPGCharacter::isAlive() const { return m_health > 0; }
+bool RPGCharacter::isAlive() const { return m_health > getMinimumHealth(); }
 
 float RPGCharacter::getHealth() const { return m_health; }
 
 std::uint8_t RPGCharacter::getLevel() const { return m_level; }
 
-void RPGCharacter::modifyDamage(HealthChangeReceptor const* other_character, float& damage_value) const
+void RPGCharacter::modifyDamage(
+    HealthChangeReceptor const* other_character, float& damage_value) const
 {
     auto const myLevel = static_cast<int>(getLevel());
     auto const otherLevel = static_cast<int>(other_character->getLevel());
@@ -48,7 +49,6 @@ void RPGCharacter::dealDamageTo(HealthChangeReceptor& recipient, float damage_va
 
     recipient.modifyDamage(this, damage_value);
 
-
     recipient.changeHealth(-damage_value);
 }
 
@@ -69,7 +69,7 @@ void RPGCharacter::changeHealth(float health_value)
 float RPGCharacter::getMinimumHealth() const { return 0.0f; }
 float RPGCharacter::getMaximumHealth() const { return 1000.0f; }
 
-void RPGCharacter::applyHealingTo(RPGCharacter& other_character, float healing_value) const
+void RPGCharacter::applyHealingTo(HealthChangeReceptor& other_character, float healing_value) const
 {
     bool trying_to_heal_self = &other_character == this;
     bool trying_to_heal_ally = other_character.isAllyWith(this);
@@ -107,11 +107,8 @@ bool RPGCharacter::isAllyWith(HealthChangeReceptor const* character) const
     std::vector<std::shared_ptr<Faction>> intersection;
 
     std::set<std::shared_ptr<Faction>> factions(character->getFactions());
-    std::set_intersection(m_factions.begin(), m_factions.end(),
-                            factions.begin(), factions.end(),
-                            std::back_inserter(intersection));
+    std::set_intersection(m_factions.begin(), m_factions.end(), factions.begin(), factions.end(),
+        std::back_inserter(intersection));
 
     return !intersection.empty();
 }
-
-

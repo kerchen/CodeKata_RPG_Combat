@@ -10,8 +10,10 @@ private:
     float m_health { getMaximumHealth() };
 
 public:
+    float getMinimumHealth() const;
     float getMaximumHealth() const override;
     float getHealth() const override;
+    bool isAlive() const override;
     void changeHealth(float health_value) override;
     double getDistance(const Position pos) const override { return 0; }
     bool isAllyWith(const HealthChangeReceptor* character) const override { return false; }
