@@ -6,10 +6,13 @@
 #include <cstdint>
 
 class Prop : public HealthChangeReceptor {
+private:
+    float m_health { getMaximumHealth() };
+
 public:
-    float getMaximumHealth() const override { return 0; }
-    float getHealth() const override { return 0; }
-    void changeHealth(float health_value) override { }
+    float getMaximumHealth() const override;
+    float getHealth() const override;
+    void changeHealth(float health_value) override;
     double getDistance(const Position pos) const override { return 0; }
     bool isAllyWith(const HealthChangeReceptor* character) const override { return false; }
     void modifyDamage(
