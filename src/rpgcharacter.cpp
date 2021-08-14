@@ -1,6 +1,7 @@
 #include "rpgcharacter.hpp"
 #include "faction.hpp"
 #include <algorithm>
+#include <iterator>
 #include <map>
 #include <vector>
 
@@ -17,9 +18,8 @@ float RPGCharacter::getHealth() const { return m_health; }
 
 std::uint8_t RPGCharacter::getLevel() const { return m_level; }
 
-void RPGCharacter::calcDamage(RPGCharacter& other_character, float& damage_value) const
+void RPGCharacter::modifyDamage(RPGCharacter& other_character, float& damage_value) const
 {
-
     auto const myLevel = static_cast<int>(getLevel());
     auto const otherLevel = static_cast<int>(other_character.getLevel());
 
@@ -43,8 +43,11 @@ void RPGCharacter::dealDamageTo(RPGCharacter& other_character, float damage_valu
     if (other_character.getDistance(m_position) > getAttackRange()) {
         return;
     }
+    if (isAllyWith(other_character)) {
+        return;
+    }
 
-    calcDamage(other_character, damage_value);
+    modifyDamage(other_character, damage_value);
 
     other_character.changeHealth(-damage_value);
 }
@@ -52,18 +55,26 @@ void RPGCharacter::dealDamageTo(RPGCharacter& other_character, float damage_valu
 void RPGCharacter::changeHealth(float health_value)
 {
     auto const newHealth = health_value + m_health;
-    if (newHealth > 1000.0f) {
-        m_health = 1000.0f;
-    } else if (newHealth < 0.0f) {
-        m_health = 0.0f;
+    if (newHealth > getMaximumHealth()) {
+        m_health = getMaximumHealth();
     } else {
-        m_health = newHealth;
+        if (newHealth < getMinimumHealth()) {
+            m_health = getMinimumHealth();
+        } else {
+            m_health = newHealth;
+        }
     }
 }
 
+float RPGCharacter::getMinimumHealth() const { return 0.0f; }
+float RPGCharacter::getMaximumHealth() const { return 1000.0f; }
+
 void RPGCharacter::applyHealingTo(RPGCharacter& other_character, float healing_value) const
 {
-    if (&other_character != this) {
+    bool trying_to_heal_self = &other_character == this;
+    bool trying_to_heal_ally = isAllyWith(other_character);
+
+    if (!trying_to_heal_self && !trying_to_heal_ally) {
         return;
     }
 
@@ -73,9 +84,9 @@ void RPGCharacter::applyHealingTo(RPGCharacter& other_character, float healing_v
 }
 double RPGCharacter::getAttackRange() const
 {
-    std::map<FighterType, double> attack_range_lookpu { { FighterType::MeleeFighter, 2.0 },
+    std::map<FighterType, double> attack_range_lookup { { FighterType::MeleeFighter, 2.0 },
         { FighterType::RangedFighter, 20.0 } };
-    return attack_range_lookpu[m_fighterType];
+    return attack_range_lookup[m_fighterType];
 }
 
 void RPGCharacter::setPosition(Position const pos) { m_position = pos; }
@@ -96,9 +107,8 @@ bool RPGCharacter::isMemberOfFaction(std::shared_ptr<Faction> faction) const
 bool RPGCharacter::isAllyWith(RPGCharacter const& character) const
 {
     std::vector<std::shared_ptr<Faction>> intersection;
-    std::set_intersection(m_factions.begin(), m_factions.end(),
-                            character.m_factions.begin(), character.m_factions.end(),
-                            std::back_inserter(intersection));
+    std::set_intersection(m_factions.begin(), m_factions.end(), character.m_factions.begin(),
+        character.m_factions.end(), std::back_inserter(intersection));
 
-    return ! intersection.empty();
+    return !intersection.empty();
 }

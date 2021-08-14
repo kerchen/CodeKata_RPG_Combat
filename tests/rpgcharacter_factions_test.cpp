@@ -3,13 +3,25 @@
 #include <gtest/gtest.h>
 #include <memory>
 
-TEST(RPGCharacterFactionTest, HeroCanJoinFaction)
+TEST(RPGCharacterFactionTest, HeroCanJoinOneFaction)
 {
     RPGCharacter hero {};
     auto f = std::make_shared<Faction>(Faction { "awesome guild" });
     hero.joinFaction(f);
 
     ASSERT_TRUE(hero.isMemberOfFaction(f));
+}
+
+TEST(RPGCharacterFactionTest, HeroCanJoinMultipleFaction)
+{
+    RPGCharacter hero {};
+    auto f1 = std::make_shared<Faction>(Faction { "Peoples' Front of Judea" });
+    auto f2 = std::make_shared<Faction>(Faction { "Judean Peoples' Front" });
+    hero.joinFaction(f1);
+    hero.joinFaction(f2);
+
+    ASSERT_TRUE(hero.isMemberOfFaction(f1));
+    ASSERT_TRUE(hero.isMemberOfFaction(f2));
 }
 
 TEST(RPGCharacterFactionTest, HeroCanLeaveFaction)
@@ -54,6 +66,14 @@ TEST(RPGCharacterFactionTest, HerosNotInSameFactionsAreNotAllies)
 
     heroA.joinFaction(f1);
     heroB.joinFaction(f2);
+
+    ASSERT_FALSE(heroA.isAllyWith(heroB));
+}
+
+TEST(RPGCharacterFactionTest, HerosInNoFactionAreNoAllies)
+{
+    RPGCharacter heroA {};
+    RPGCharacter heroB {};
 
     ASSERT_FALSE(heroA.isAllyWith(heroB));
 }

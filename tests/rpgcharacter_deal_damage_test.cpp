@@ -1,16 +1,15 @@
-#include <gtest/gtest.h>
-
 #include "constants.hpp"
+#include "faction.hpp"
 #include "position.hpp"
 #include "rpgcharacter.hpp"
+#include <gtest/gtest.h>
+#include <memory>
 
 using namespace ::testing;
 
 class RPGCharacterDealDamageTest : public ::testing::Test {
 protected:
-    RPGCharacterDealDamageTest()
-    {
-    }
+    RPGCharacterDealDamageTest() { }
     RPGCharacter const heroA {};
     RPGCharacter heroB {};
 };
@@ -128,3 +127,18 @@ TEST_F(RPGCharacterDealDamageTest, InRangeRangedCharacterDealsDamage)
     heroC.dealDamageTo(heroB, 500.0f);
     ASSERT_EQ(heroB.getHealth(), 500.0f);
 }
+
+TEST_F(RPGCharacterDealDamageTest, AlliesCannotDealDamageToEachOther)
+{
+    RPGCharacter heroC = getRangedHeroAtLevel(1);
+    Position const positionHeroB { 15.0 };
+    auto f = std::make_shared<Faction>(Faction { "awesome guild" });
+    heroB.joinFaction(f);
+    heroC.joinFaction(f);
+
+
+    heroC.dealDamageTo(heroB, 500.0f);
+    ASSERT_EQ(heroB.getHealth(), initial_health);
+}
+
+

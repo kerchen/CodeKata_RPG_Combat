@@ -19,7 +19,10 @@ private:
     std::set<std::shared_ptr<Faction>> m_factions;
 
     void changeHealth(float health_value);
-    void calcDamage(RPGCharacter& other_character, float& damage_value) const;
+    void modifyDamage(RPGCharacter& other_character, float& damage_value) const;
+
+    float getMaximumHealth() const;
+    float getMinimumHealth() const;
 
 public:
     RPGCharacter(float initial_health = 1000.0f, uint8_t level = 1,
