@@ -4,19 +4,24 @@
 #include <cstdint>
 
 class RPGCharacter;
+class Prop;
 
 class DamageCalculatorInterface {
 public:
-    virtual float getModifiedDamageValue(
-        RPGCharacter const&, RPGCharacter&, float initial_damage_value) const = 0;
+    virtual float getResultingDamage(RPGCharacter const& attacker, RPGCharacter const& defender,
+        float initial_damage_value) const = 0;
+
+    virtual float getResultingDamage(
+        RPGCharacter const& attacker, Prop const& defender, float initial_damage_value) const = 0;
 };
 
 class DamageCalculator : public DamageCalculatorInterface {
 public:
     float modifyDamage(std::uint8_t const attacker_level, std::uint8_t const defender_level,
         float initial_damage_value) const;
-
-    float getModifiedDamageValue(RPGCharacter const& attacker, RPGCharacter& defender,
+    float getResultingDamage(RPGCharacter const& attacker, Prop const& defender,
+        float initial_damage_value) const override;
+    float getResultingDamage(RPGCharacter const& attacker, const RPGCharacter& defender,
         float initial_damage_value) const override;
 };
 

@@ -1,4 +1,5 @@
 #include "damagecalculator.hpp"
+#include "prop.hpp"
 #include "rpgcharacter.hpp"
 
 float DamageCalculator::modifyDamage(std::uint8_t const attacker_level,
@@ -17,8 +18,8 @@ float DamageCalculator::modifyDamage(std::uint8_t const attacker_level,
     return initial_damage_value;
 }
 
-float DamageCalculator::getModifiedDamageValue(
-    RPGCharacter const& attacker, RPGCharacter& defender, float initial_damage_value) const
+float DamageCalculator::getResultingDamage(
+    RPGCharacter const& attacker, const RPGCharacter& defender, float initial_damage_value) const
 {
     if (&attacker == &defender) {
         return 0.0f;
@@ -33,4 +34,10 @@ float DamageCalculator::getModifiedDamageValue(
     }
 
     return modifyDamage(attacker.getLevel(), defender.getLevel(), initial_damage_value);
+}
+
+float DamageCalculator::getResultingDamage(
+    RPGCharacter const& attacker, Prop const& defender, float initial_damage_value) const
+{
+    return initial_damage_value;
 }

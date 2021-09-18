@@ -1,5 +1,6 @@
 #include "damagecalculator.hpp"
 #include "faction.hpp"
+#include "prop.hpp"
 #include "rpgcharacter.hpp"
 #include <gtest/gtest.h>
 
@@ -7,7 +8,7 @@ TEST(DamageCalculatorTest, SameCharacterReturnsZeroDamage)
 {
     RPGCharacter c;
     DamageCalculator const dc;
-    ASSERT_FLOAT_EQ(dc.getModifiedDamageValue(c, c, 100.0f), 0.0f);
+    ASSERT_FLOAT_EQ(dc.getResultingDamage(c, c, 100.0f), 0.0f);
 }
 
 TEST(DamageCalculatorTest, DefenderOutOfRangeReturnsZeroDamage)
@@ -18,7 +19,7 @@ TEST(DamageCalculatorTest, DefenderOutOfRangeReturnsZeroDamage)
 
     DamageCalculator const dc;
 
-    ASSERT_FLOAT_EQ(dc.getModifiedDamageValue(attacker, defender, 100.0f), 0.0f);
+    ASSERT_FLOAT_EQ(dc.getResultingDamage(attacker, defender, 100.0f), 0.0f);
 }
 
 TEST(DamageCalculatorTest, AllyDefenderReturnsZeroDamage)
@@ -32,7 +33,7 @@ TEST(DamageCalculatorTest, AllyDefenderReturnsZeroDamage)
 
     DamageCalculator const dc;
 
-    ASSERT_FLOAT_EQ(dc.getModifiedDamageValue(attacker, defender, 100.0f), 0.0f);
+    ASSERT_FLOAT_EQ(dc.getResultingDamage(attacker, defender, 100.0f), 0.0f);
 }
 
 TEST(DamageCalculatorTest, DamageIsUnmodified)
@@ -63,4 +64,13 @@ TEST(DamageCalculatorTest, DamageIsModifiedDown)
     auto const modified_damage = dc.modifyDamage(5, 15, unmodified_damage);
 
     ASSERT_LT(modified_damage, unmodified_damage);
+}
+
+TEST(DamageCalculatorTest, ResultingDamageForPropIsUnmodified)
+{
+    RPGCharacter attacker;
+    Prop tree;
+    DamageCalculator const dc;
+
+    ASSERT_FLOAT_EQ(dc.getResultingDamage(attacker, tree, 100.0f), 100.0f);
 }

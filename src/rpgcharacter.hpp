@@ -37,8 +37,12 @@ public:
     float getHealth() const;
     std::uint8_t getLevel() const;
 
-    void dealDamageTo(RPGCharacter& other_character, float damage_value = 1) const;
-    void dealDamageTo(Prop& target, float damage_value = 1) const;
+    template <class DefenderT>
+    void dealDamageTo(DefenderT& recipient, float damage_value = 1) const
+    {
+        recipient.changeHealth(
+            -m_damageCalculator->getResultingDamage(*this, recipient, damage_value));
+    }
 
     void applyHealingTo(RPGCharacter& other_character, float healing_value = 1) const;
     double getAttackRange() const;

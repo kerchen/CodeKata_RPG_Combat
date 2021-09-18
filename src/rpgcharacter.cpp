@@ -24,19 +24,6 @@ float RPGCharacter::getHealth() const { return m_health; }
 
 std::uint8_t RPGCharacter::getLevel() const { return m_level; }
 
-void RPGCharacter::dealDamageTo(RPGCharacter& recipient, float damage_value) const
-{
-    auto modified_damage
-        = m_damageCalculator->getModifiedDamageValue(*this, recipient, damage_value);
-
-    recipient.changeHealth(-modified_damage);
-}
-
-void RPGCharacter::dealDamageTo(Prop& target, float damage_value) const
-{
-    target.changeHealth(-damage_value);
-}
-
 void RPGCharacter::changeHealth(float health_value)
 {
     auto const newHealth = health_value + m_health;
