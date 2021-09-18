@@ -24,39 +24,12 @@ float RPGCharacter::getHealth() const { return m_health; }
 
 std::uint8_t RPGCharacter::getLevel() const { return m_level; }
 
-void RPGCharacter::modifyDamage(RPGCharacter const* other_character, float& damage_value) const
-{
-    auto const myLevel = static_cast<int>(getLevel());
-    auto const otherLevel = static_cast<int>(other_character->getLevel());
-
-    int level_difference = myLevel - otherLevel;
-
-    if (level_difference <= -5) {
-        damage_value *= 1.5f;
-    }
-    if (level_difference >= 5) {
-        damage_value *= 0.5f;
-    }
-}
-
 void RPGCharacter::dealDamageTo(RPGCharacter& recipient, float damage_value) const
 {
-    m_damageCalculator->getModifiedDamageValue(*this, recipient, damage_value);
+    auto modified_damage
+        = m_damageCalculator->getModifiedDamageValue(*this, recipient, damage_value);
 
-    if (&recipient == this) {
-        return;
-    }
-
-    if (recipient.getDistance(m_position) > getAttackRange()) {
-        return;
-    }
-    if (recipient.isAllyWith(this)) {
-        return;
-    }
-
-    recipient.modifyDamage(this, damage_value);
-
-    recipient.changeHealth(-damage_value);
+    recipient.changeHealth(-modified_damage);
 }
 
 void RPGCharacter::dealDamageTo(Prop& target, float damage_value) const
@@ -100,6 +73,8 @@ double RPGCharacter::getAttackRange() const
         { FighterType::RangedFighter, 20.0 } };
     return attack_range_lookup[m_fighterType];
 }
+
+Position RPGCharacter::getPosition() const { return m_position; }
 
 void RPGCharacter::setPosition(Position const pos) { m_position = pos; }
 

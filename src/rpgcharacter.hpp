@@ -24,8 +24,6 @@ private:
 
     void changeHealth(float health_value) override;
 
-    void modifyDamage(RPGCharacter const* other_character, float& damage_value) const;
-
     float getMaximumHealth() const;
     float getMinimumHealth() const;
 
@@ -44,6 +42,7 @@ public:
 
     void applyHealingTo(RPGCharacter& other_character, float healing_value = 1) const;
     double getAttackRange() const;
+    Position getPosition() const;
     void setPosition(Position const pos);
     double getDistance(Position const pos) const;
     void joinFaction(std::shared_ptr<Faction> faction);
