@@ -136,9 +136,6 @@ TEST_F(RPGCharacterDealDamageTest, AlliesCannotDealDamageToEachOther)
     heroB.joinFaction(f);
     heroC.joinFaction(f);
 
-
     heroC.dealDamageTo(heroB, 500.0f);
     ASSERT_EQ(heroB.getHealth(), initial_health);
 }
-
-

@@ -6,11 +6,16 @@
 #include <map>
 #include <vector>
 
-RPGCharacter::RPGCharacter(float initial_health, uint8_t level, FighterType fighterType)
+RPGCharacter::RPGCharacter(float initial_health, uint8_t level, FighterType fighterType,
+    std::shared_ptr<DamageCalculatorInterface> damage_calculator)
     : m_health { initial_health }
     , m_level { level }
     , m_fighterType { fighterType }
+    , m_damageCalculator { damage_calculator }
 {
+    if (m_damageCalculator == nullptr) {
+        m_damageCalculator = std::make_shared<DamageCalculator>();
+    }
 }
 
 bool RPGCharacter::isAlive() const { return m_health > getMinimumHealth(); }
@@ -19,8 +24,7 @@ float RPGCharacter::getHealth() const { return m_health; }
 
 std::uint8_t RPGCharacter::getLevel() const { return m_level; }
 
-void RPGCharacter::modifyDamage(
-    RPGCharacter const* other_character, float& damage_value) const
+void RPGCharacter::modifyDamage(RPGCharacter const* other_character, float& damage_value) const
 {
     auto const myLevel = static_cast<int>(getLevel());
     auto const otherLevel = static_cast<int>(other_character->getLevel());
@@ -37,6 +41,8 @@ void RPGCharacter::modifyDamage(
 
 void RPGCharacter::dealDamageTo(RPGCharacter& recipient, float damage_value) const
 {
+    m_damageCalculator->getModifiedDamageValue(*this, recipient, damage_value);
+
     if (&recipient == this) {
         return;
     }
@@ -53,7 +59,8 @@ void RPGCharacter::dealDamageTo(RPGCharacter& recipient, float damage_value) con
     recipient.changeHealth(-damage_value);
 }
 
-void RPGCharacter::dealDamageTo(Prop& target, float damage_value) const {
+void RPGCharacter::dealDamageTo(Prop& target, float damage_value) const
+{
     target.changeHealth(-damage_value);
 }
 
@@ -117,4 +124,3 @@ bool RPGCharacter::isAllyWith(RPGCharacter const* character) const
 
     return !intersection.empty();
 }
-
