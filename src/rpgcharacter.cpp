@@ -6,11 +6,16 @@
 #include <map>
 #include <vector>
 
-RPGCharacter::RPGCharacter(float initial_health, uint8_t level, FighterType fighterType)
+RPGCharacter::RPGCharacter(float initial_health, uint8_t level, FighterType fighterType,
+    std::shared_ptr<DamageCalculatorInterface> damage_calculator)
     : m_health { initial_health }
     , m_level { level }
     , m_fighterType { fighterType }
+    , m_damageCalculator { damage_calculator }
 {
+    if (m_damageCalculator == nullptr) {
+        m_damageCalculator = std::make_shared<DamageCalculator>();
+    }
 }
 
 bool RPGCharacter::isAlive() const { return m_health > getMinimumHealth(); }
@@ -18,44 +23,6 @@ bool RPGCharacter::isAlive() const { return m_health > getMinimumHealth(); }
 float RPGCharacter::getHealth() const { return m_health; }
 
 std::uint8_t RPGCharacter::getLevel() const { return m_level; }
-
-void RPGCharacter::modifyDamage(
-    RPGCharacter const* other_character, float& damage_value) const
-{
-    auto const myLevel = static_cast<int>(getLevel());
-    auto const otherLevel = static_cast<int>(other_character->getLevel());
-
-    int level_difference = myLevel - otherLevel;
-
-    if (level_difference <= -5) {
-        damage_value *= 1.5f;
-    }
-    if (level_difference >= 5) {
-        damage_value *= 0.5f;
-    }
-}
-
-void RPGCharacter::dealDamageTo(RPGCharacter& recipient, float damage_value) const
-{
-    if (&recipient == this) {
-        return;
-    }
-
-    if (recipient.getDistance(m_position) > getAttackRange()) {
-        return;
-    }
-    if (recipient.isAllyWith(this)) {
-        return;
-    }
-
-    recipient.modifyDamage(this, damage_value);
-
-    recipient.changeHealth(-damage_value);
-}
-
-void RPGCharacter::dealDamageTo(Prop& target, float damage_value) const {
-    target.changeHealth(-damage_value);
-}
 
 void RPGCharacter::changeHealth(float health_value)
 {
@@ -94,6 +61,8 @@ double RPGCharacter::getAttackRange() const
     return attack_range_lookup[m_fighterType];
 }
 
+Position RPGCharacter::getPosition() const { return m_position; }
+
 void RPGCharacter::setPosition(Position const pos) { m_position = pos; }
 
 double RPGCharacter::getDistance(Position const pos) const { return m_position.getDistance(pos); }
@@ -117,4 +86,3 @@ bool RPGCharacter::isAllyWith(RPGCharacter const* character) const
 
     return !intersection.empty();
 }
-

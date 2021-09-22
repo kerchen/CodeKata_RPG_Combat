@@ -1,17 +1,14 @@
+#include "constants.hpp"
+#include "faction.hpp"
+#include "rpgcharacter.hpp"
 #include <gtest/gtest.h>
 #include <memory>
-#include "faction.hpp"
-#include "constants.hpp"
-#include "rpgcharacter.hpp"
 
 using namespace ::testing;
 
 class RPGCharacterHealTest : public ::testing::Test {
 protected:
-    RPGCharacterHealTest()
-        : heroB()
-    {
-    }
+    RPGCharacterHealTest() { }
     RPGCharacter heroA;
     RPGCharacter heroB;
 
@@ -26,7 +23,7 @@ TEST_F(RPGCharacterHealTest, DeadCharacterCannotBeHealed)
 {
     killHeroB();
     heroB.applyHealingTo(heroB, 1);
-    
+
     ASSERT_EQ(heroB.isAlive(), false);
 }
 
@@ -64,5 +61,5 @@ TEST_F(RPGCharacterHealTest, CharacterCanHealAlly)
 
     heroA.applyHealingTo(heroB, 1);
 
-    ASSERT_EQ(heroB.getHealth(), maximum_health );
+    ASSERT_EQ(heroB.getHealth(), maximum_health);
 }

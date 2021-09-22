@@ -3,6 +3,8 @@
 #include <gtest/gtest.h>
 #include <memory>
 
+// TODO create test fixtures for the tests in this file
+
 TEST(RPGCharacterFactionTest, HeroCanJoinOneFaction)
 {
     RPGCharacter hero {};
